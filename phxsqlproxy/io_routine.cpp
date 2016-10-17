@@ -439,9 +439,6 @@ int IORoutine::run() {
 
             int byte_size = TransMsgDirect(client_fd_, sqlsvr_fd_, pf, 2);
             if (byte_size < 0) {
-                if (byte_size == -364) {
-                    LogError("%s:%d %llu svr fd closed", __func__, __LINE__, req_uniq_id_);
-                }
                 ClearAll();
                 break;
             }
@@ -449,9 +446,6 @@ int IORoutine::run() {
             ByteFromMysqlClient(byte_size);
             int byte_size2 = TransMsgDirect(sqlsvr_fd_, client_fd_, pf, 2);
             if (byte_size2 < 0) {
-                if (byte_size2 == -364) {
-                    LogError("%s:%d %llu svr fd closed", __func__, __LINE__, req_uniq_id_);
-                }
                 ClearAll();
                 break;
             }
