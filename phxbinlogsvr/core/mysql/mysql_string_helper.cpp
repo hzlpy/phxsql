@@ -42,9 +42,14 @@ string MySqlStringHelper::GetSvrIDString(const uint32_t &svr_id) {
     return cmd;
 }
 
-string MySqlStringHelper::GetCreateUserStr(const string &username) {
+string MySqlStringHelper::GetCreateUserStr(const string &username, const string &pwd) {
     char cmd[1024];
-    sprintf(cmd, "create user %s@'127.0.0.1';", username.c_str());
+	if(pwd.empty()) {
+		sprintf(cmd, "create user %s;", username.c_str());
+	}
+	else {
+		sprintf(cmd, "create user %s@'127.0.0.1' identified by '%s';", username.c_str(), pwd.c_str());
+	}
     return cmd;
 }
 

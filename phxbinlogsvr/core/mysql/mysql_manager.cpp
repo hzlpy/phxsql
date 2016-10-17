@@ -206,7 +206,7 @@ int MySqlManager::ChangePwd(const string &username, const string &pwd) {
 int MySqlManager::CreateUser(const string &username,const string &pwd) {
     int ret = CheckUserExist(username);
     if (ret == MYSQL_USER_NOT_EXIST) {
-        ret = Query(MySqlStringHelper::GetCreateUserStr(username));
+        ret = Query(MySqlStringHelper::GetCreateUserStr(username, pwd));
     }
     return ret;
 }
@@ -313,13 +313,14 @@ int MySqlManager::CreateAdmin(const string &admin_username, const string &admin_
         }
         LogVerbose("%s grant %s user %s done", __func__, grant_string.c_str(), admin_username.c_str());
     }
+	//not real change pwd. if change, the connection for other operation will be fail.
 	return OK;
 }
 
 int MySqlManager::CreateReplica(const string &admin_username, const string &replica_username,
                                 const string &replica_pwd) {
     if (replica_username != GetReplicaUserName()) {
-        int ret = CreateUser(replica_username,replica_pwd);
+        int ret = CreateUser(replica_username,"");
         if (ret) {
             return ret;
         }
